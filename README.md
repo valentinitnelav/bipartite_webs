@@ -23,8 +23,7 @@ All in all, I am only interested in editing the two functions mentioned above fo
 - label adjustments:
   - [x] allow `side`, `las`, `font` and `mgp` changes for axis labels;
   - [x] add `mtext` for axis titles;
+  - [ ] better replace `mtext` with `text`, which allows text rotation with `srt`; see this [FAQ](https://cran.r-project.org/doc/FAQ/R-FAQ.html#How-can-I-create-rotated-axis-labels_003f) or this [blog post](https://menugget.blogspot.de/2014/08/rotated-axis-labels-in-r-plots.html);
+  - [ ] use also `text` for axis labels instead of the current `axis` (for the same reason as above);
   - [x] re-arrange code (plot first matrix, then annotation) - this helps detecting if labels are under the matrix when testing edits;
-  
-### Atempting (to do)
-  
-  - [ ] in `visweb` allow different sorting of the matrix to get the nestedness visual effect in any desired corner. This can be helpful when needing to rotate/further edit graphs in Inkscape.
+  - [ ] allow different sorting of the matrix to get the nestedness visual effect in any desired corner. This can be helpful when needing to rotate/further edit graphs in Inkscape.
