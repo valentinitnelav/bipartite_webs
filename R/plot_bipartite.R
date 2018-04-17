@@ -1,4 +1,4 @@
-plotweb <-
+plot_bipartite <-
   function(web,
            method = "cca",
            empty = TRUE,

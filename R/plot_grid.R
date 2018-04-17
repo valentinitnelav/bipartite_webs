@@ -1,4 +1,4 @@
-visweb <-
+plot_grid <-
   function(web,
            type = "nested",
            prednames = TRUE,
