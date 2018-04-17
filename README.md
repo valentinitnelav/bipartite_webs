@@ -2,12 +2,15 @@
 
 Note the naming equivalence:
 
-- `plot_grid` corresponds to `bipartite::visweb`
-- `plot_bipartite` corresponds to `bipartite::plotweb`
+- `plot_grid` corresponds to `bipartite::visweb` ([Aug 19, 2015][visweb])
+- `plot_bipartite` corresponds to `bipartite::plotweb` ([Oct 6, 2014][plotweb])
 
-Original code for functions `visweb` (`plot_grid`) and `plotweb` (`plot_bipartite`) was taken from [bipartite GitHub repository](https://github.com/biometry/bipartite). I made a fork initially, but I realized soon than the repository is taking more space that I am willing to allocate. 
+Original code for functions [`visweb`][visweb] (`plot_grid`) and [`plotweb`][plotweb] (`plot_bipartite`) was taken from [bipartite GitHub repository](https://github.com/biometry/bipartite). I made a fork initially, but I realized soon than the repository is taking more space that I am willing to allocate. 
 
 All in all, I am only interested in editing the two functions mentioned above for personal use, so I started this separate repository.
+
+[visweb]: https://github.com/biometry/bipartite/blob/81fd6a4c181eff2fc1d229f32c2f73f91fb37c87/bipartite/R/visweb.R
+[plotweb]: https://github.com/biometry/bipartite/blob/81fd6a4c181eff2fc1d229f32c2f73f91fb37c87/bipartite/R/plotweb.R
 
 ## Usage
 
@@ -20,9 +23,9 @@ source("https://raw.githubusercontent.com/valentinitnelav/bipartite_webs/master/
 source("https://raw.githubusercontent.com/valentinitnelav/bipartite_webs/master/R/plot_grid.R")
 ```
 
-### Edits / Additional features:
+## Edits / Additional features:
 
-#### in `plot_bipartite` (`bipartite::plotweb`)
+### in `plot_bipartite` (`bipartite::plotweb`)
 
 - [x] disable `par` modifications during function call;
 - label adjustments:
@@ -30,7 +33,7 @@ source("https://raw.githubusercontent.com/valentinitnelav/bipartite_webs/master/
 - [x] allow text rotation separately for lower and upper labels;
 - [x] allow adjustment of `pos`, `offset` and `font` separately for lower and upper labels;
 
-#### in `plot_grid` (`bipartite::visweb`)
+### in `plot_grid` (`bipartite::visweb`)
 
 - [x] disable `par` modifications during function call;
 - [x] add `x.lim` & `y.lim` arguments used for the same purpose as in `plotweb`;
