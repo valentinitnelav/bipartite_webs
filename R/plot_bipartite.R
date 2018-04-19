@@ -212,7 +212,7 @@ plot_bipartite <-
       if (is.null(x.lim)) x.lim <- range(wleft, wright)
       
       ### beginn of plotting
-      if (add==FALSE)     plot(0, type = "n", xlim = x.lim, ylim = y.lim, axes = plot.axes, xlab = "", ylab = "")
+      if (add==FALSE) plot(0, type = "n", xlim = x.lim, ylim = y.lim, axes = plot.axes, xlab = "", ylab = "")
       
       # plotting of highator boxes....
       
@@ -225,13 +225,25 @@ plot_bipartite <-
         hoehe <- strheight(colnames(web)[1], cex = 0.6)
         if (!is.null(high.lab.dis)) hoehe=high.lab.dis
         for (i in 1:n.high) {
-          rect(high_x+high.xoff, high.y - y.width.high, high_x+high.xoff + high_prop[i],
-               high.y + y.width.high, col = col.high[(high.order[i]-1) %% (length(col.high))+1], border=bor.col.high[(high.order[i]-1) %% (length(bor.col.high))+1])
+          rect(
+            high_x + high.xoff,
+            high.y - y.width.high,
+            high_x + high.xoff + high_prop[i],
+            high.y + y.width.high,
+            col = col.high[(high.order[i] - 1) %% (length(col.high)) + 1],
+            border = bor.col.high[(high.order[i] - 1) %% (length(bor.col.high)) + 1]
+          )
           #### coloured boxes at the end if highfreq is given
           if (!is.null(high.abun))
           {
-            rect(high_x+high.xoff + high_prop[i]-diffh[i], high.y - y.width.high, high_x +high.xoff+ high_prop[i],
-                 high.y + y.width.high, col = high.abun.col[(high.order[i]-1) %% (length(high.abun.col))+1],                           border=bor.high.abun.col[(high.order[i]-1) %% (length(bor.high.abun.col))+1])
+            rect(
+              high_x + high.xoff + high_prop[i] - diffh[i],
+              high.y - y.width.high,
+              high_x + high.xoff + high_prop[i],
+              high.y + y.width.high,
+              col = high.abun.col[(high.order[i] - 1) %% (length(high.abun.col)) + 1],
+              border = bor.high.abun.col[(high.order[i] - 1) %% (length(bor.high.abun.col)) + 1]
+            )
           }
           
           breite <- strwidth(colnames(web)[i], cex = labsize.high)
@@ -276,13 +288,25 @@ plot_bipartite <-
         if (!is.null(low.lab.dis)) hoehe=low.lab.dis
         hoffset <- hoehe
         for (i in 1:n.low) {
-          rect(low_x+low.xoff, low.y - y.width.low, low_x +low.xoff+ low_prop[i],
-               low.y + y.width.low, col = col.low[(low.order[i]-1) %% (length(col.low))+1], border=bor.col.low[(low.order[i]-1) %% (length(bor.col.low))+1])
+          rect(
+            low_x + low.xoff,
+            low.y - y.width.low,
+            low_x + low.xoff + low_prop[i],
+            low.y + y.width.low,
+            col = col.low[(low.order[i] - 1) %% (length(col.low)) + 1],
+            border = bor.col.low[(low.order[i] - 1) %% (length(bor.col.low)) + 1]
+          )
           #### coloured boxes at the end if lowfreq is given
           if (!is.null(low.abun))
           {
-            rect(low_x+low.xoff + low_prop[i]-difff[i], low.y - y.width.low, low_x +low.xoff+ low_prop[i],
-                 low.y + y.width.low, col = low.abun.col[(low.order[i]-1) %% (length(low.abun.col))+1], border=bor.low.abun.col[(low.order[i]-1) %% (length(bor.low.abun.col))+1])
+            rect(
+              low_x + low.xoff + low_prop[i] - difff[i],
+              low.y - y.width.low,
+              low_x + low.xoff + low_prop[i],
+              low.y + y.width.low,
+              col = low.abun.col[(low.order[i] - 1) %% (length(low.abun.col)) + 1],
+              border = bor.low.abun.col[(low.order[i] - 1) %% (length(bor.low.abun.col)) + 1]
+            )
           }
           breite <- strwidth(rownames(web)[i], cex = labsize.low)
           links <- low_x + low_prop[i]/2 - breite/2
@@ -327,7 +351,12 @@ plot_bipartite <-
       #    zwischenweb[XYcoords[i, 1], XYcoords[i, 2]] <- -1
       #}
       ## new code by Dirk Raetzel, introduced in version 1.18:
-      web.df <- data.frame(row=rep(1:n.low,n.high),col=rep(1:n.high,each=n.low),dat=c(web))
+      web.df <-
+        data.frame(
+          row = rep(1:n.low, n.high),
+          col = rep(1:n.high, each = n.low),
+          dat = c(web)
+        )
       web.df <- web.df[order(-web.df$dat),]
       XYcoords <- as.matrix(web.df[,1:2])
       ## end new code
@@ -341,15 +370,13 @@ plot_bipartite <-
         j <- XYcoords[p, 2]
         
         if (j == 1 & i == 1)
-          x1 <- 0   else x1 <- (j - 1) * high_spacing + cumsum(web)[(j -
-                                                                       1) * nrow(web) + (i - 1)]/websum
+          x1 <- 0 else x1 <- (j - 1) * high_spacing + cumsum(web)[(j - 1) * nrow(web) + (i - 1)]/websum
         if (!is.null(high.abun) && j>1) x1 <- x1 +cumsum(diffh)[j-1]
         x2 <- x1 + web[i, j]/websum
         if (arrow=="up" || arrow=="both") {x2<-(x1+x2)/2; x1<-x2}
         if (arrow=="up.center"|| arrow=="both.center")
         {
-          if (j!=1)  {x2 <-  (j - 1) * high_spacing + cumsum(web)[(j -
-                                                                     1) * nrow(web) ]/websum +colSums(web)[j]/websum/2
+          if (j!=1) {x2 <- (j - 1) * high_spacing + cumsum(web)[(j - 1) * nrow(web) ]/websum +colSums(web)[j]/websum/2
           if (!is.null(high.abun)) x2 <- x2 +cumsum(diffh)[j-1]
           x1<-x2
           }  else
@@ -359,16 +386,17 @@ plot_bipartite <-
         }
         tweb <- t(web)
         if (j == 1 & i == 1)
-          x3 <- 0   else x3 <- (i - 1) * low_spacing + cumsum(tweb)[(i -
-                                                                       1) * nrow(tweb) + (j - 1)]/websum
+          x3 <- 0 else x3 <- (i - 1) * low_spacing + cumsum(tweb)[(i - 1) * nrow(tweb) + (j - 1)]/websum
         if (!is.null(low.abun) && i>1) x3 <- x3 +cumsum(difff)[i-1]
         x4 <- x3 + tweb[j, i]/websum
         if (arrow=="down" || arrow=="both") {x4<-(x3+x4)/2; x3<-x4}
         if (arrow=="down.center" || arrow=="both.center")
         {
-          if (i!=1)  {x3 <-  (i - 1) * low_spacing + cumsum(tweb)[(i -
-                                                                     1) * nrow(tweb) ]/websum +colSums(tweb)[i]/websum/2
-          if (!is.null(low.abun)) x3<- x3 +cumsum(difff)[i-1]
+          if (i != 1)  {
+            x3 <-
+              (i - 1) * low_spacing + cumsum(tweb)[(i - 1) * nrow(tweb)] / websum +
+              colSums(tweb)[i] / websum / 2
+            if (!is.null(low.abun)) x3<- x3 +cumsum(difff)[i-1]
           x4<-x3
           
           }  else
@@ -377,9 +405,18 @@ plot_bipartite <-
           }
         }
         # calculate color of interaction based on web order
-        icol <- col.interaction[((low.order[XYcoords[p,1]]-1)* (length(high.order))+(high.order[XYcoords[p,2]]-1)) %% (length(col.interaction))+1]
-        bicol <- bor.col.interaction[((low.order[XYcoords[p,1]]-1)* (length(high.order))+(high.order[XYcoords[p,2]]-1)) %% (length(bor.col.interaction))+1]
-        polygon(c(x1+high.xoff, x2+high.xoff, x4+low.xoff, x3+low.xoff), c(y1, y2, y4, y3), col = icol, border=bicol)
+        icol <-
+          col.interaction[((low.order[XYcoords[p, 1]] - 1) * (length(high.order)) +
+                             (high.order[XYcoords[p, 2]] - 1)) %% (length(col.interaction)) + 1]
+        bicol <-
+          bor.col.interaction[((low.order[XYcoords[p, 1]] - 1) * (length(high.order)) +
+                                 (high.order[XYcoords[p, 2]] - 1)) %% (length(bor.col.interaction)) + 1]
+        polygon(
+          c(x1 + high.xoff, x2 + high.xoff, x4 + low.xoff, x3 + low.xoff),
+          c(y1, y2, y4, y3),
+          col = icol,
+          border = bicol
+        )
       }
       #par(op)
     }
@@ -519,7 +556,7 @@ plot_bipartite <-
       
       
       ### beginn of plotting ###
-      if (add==FALSE)     plot(0, type = "n", xlim = x.lim, ylim = y.lim, axes = plot.axes, xlab = "", ylab = "")
+      if (add==FALSE) plot(0, type = "n", xlim = x.lim, ylim = y.lim, axes = plot.axes, xlab = "", ylab = "")
       
       
       #--- PART 3: plotting boxes -----
@@ -549,9 +586,14 @@ plot_bipartite <-
         hoehe <- strheight(colnames(web)[1], cex = 0.6)
         if (!is.null(high.lab.dis)) hoehe=high.lab.dis
         for (i in 1:n.high) {
-          rect(x1_vals[i]+high.xoff , high.y - y.width.high, x2_vals[i] +high.xoff,
-               high.y + y.width.high, col = high.abun.col[(high.order[i]-1) %% (length(high.abun.col))+1],
-               border=bor.high.abun.col[(high.order[i]-1) %% (length(bor.high.abun.col))+1])
+          rect(
+            x1_vals[i] + high.xoff ,
+            high.y - y.width.high,
+            x2_vals[i] + high.xoff,
+            high.y + y.width.high,
+            col = high.abun.col[(high.order[i] - 1) %% (length(high.abun.col)) + 1],
+            border = bor.high.abun.col[(high.order[i] - 1) %% (length(bor.high.abun.col)) + 1]
+          )
           # labels
           high_x <- x1_vals[i]
           breite <- strwidth(colnames(web)[i], cex = labsize.high)
@@ -596,9 +638,14 @@ plot_bipartite <-
         if (!is.null(low.lab.dis)) hoehe=low.lab.dis
         hoffset <- hoehe
         for (i in 1:n.low) {
-          rect(x3_vals[i]+low.xoff , low.y - y.width.low, x4_vals[i] +low.xoff,
-               low.y + y.width.low, col = low.abun.col[(low.order[i]-1) %% (length(low.abun.col))+1],
-               border=bor.low.abun.col[(low.order[i]-1) %% (length(bor.low.abun.col))+1])
+          rect(
+            x3_vals[i] + low.xoff ,
+            low.y - y.width.low,
+            x4_vals[i] + low.xoff,
+            low.y + y.width.low,
+            col = low.abun.col[(low.order[i] - 1) %% (length(low.abun.col)) + 1],
+            border = bor.low.abun.col[(low.order[i] - 1) %% (length(bor.low.abun.col)) + 1]
+          )
           # labels
           low_x <- x3_vals[i]
           breite <- strwidth(rownames(web)[i], cex = labsize.low)
@@ -638,7 +685,12 @@ plot_bipartite <-
       py <- c(0, 0, 0, 0)
       high_x <- 0
       ## new code by Dirk Raetzel, introduced in version 1.18:
-      web.df <- data.frame(row=rep(1:n.low,n.high),col=rep(1:n.high,each=n.low),dat=c(web))
+      web.df <-
+        data.frame(
+          row = rep(1:n.low, n.high),
+          col = rep(1:n.high, each = n.low),
+          dat = c(web)
+        )
       web.df <- web.df[order(-web.df$dat),]
       XYcoords <- as.matrix(web.df[1:sum(web > 0), 1:2])  #edited by JoF: only nonzero links
       ## end new code
