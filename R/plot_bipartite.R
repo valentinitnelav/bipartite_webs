@@ -25,13 +25,15 @@ plot_bipartite <-
            high.abun = NULL,
            high.abun.col = "red",
            bor.high.abun.col = "black",
-           text.rot.low = 0,
+           text.rot.low = 0, # passed to "srt" argument of text() function
            text.rot.high = 0,
-           text.pos.low = NULL,
+           text.pos.low = NULL, # passed to "pos" argument of text() function
            text.pos.high = NULL,
-           text.offset.low = 0.5,
+           text.offset.low = 0.5, # passed to "offset" argument of text() function
            text.offset.high = 0.5,
-           text.font.low = NULL,
+           text.offset.low.y = 0, # add to y coords of labels when the usual offset doesn't work in the desired direction
+           text.offset.high.y = 0,
+           text.font.low = NULL, # passed to "font" argument of text() function
            text.font.high = NULL,
            text.high.col = "black",
            text.low.col = "black",
@@ -61,7 +63,9 @@ plot_bipartite <-
     # an alternative approach for the independent abundance case would be to have an option arrow='both.center' that shows interaction strength (unlike the current version) as line width, but this wouldn't be identical to the current version (in which (orthogonally measured) 'line width' varies) 
     
     
-    #----------------------- classic plotweb function by Bernd Gruber, to be used if abuns.type=='additional' ---------
+    # CLASSIC plotweb function by Bernd Gruber --------------------------------
+    # to be used if abuns.type=='additional'
+    
     #! if abuns.type='additional' or 'none', call BerndGrubers old plotweb function! [and just state that they must be additional, might be calculated by subtracting interacting individuals from total abun]
     if (abuns.type %in% c('additional','none')){
       #op <- par(no.readonly = TRUE)
@@ -211,10 +215,18 @@ plot_bipartite <-
       if (is.null(y.lim)) y.lim <- range(wdown/ybig, wup * ybig)
       if (is.null(x.lim)) x.lim <- range(wleft, wright)
       
-      ### beginn of plotting
-      if (add==FALSE) plot(0, type = "n", xlim = x.lim, ylim = y.lim, axes = plot.axes, xlab = "", ylab = "")
+      # . beginning of plotting -------------------------------------------------
       
-      # plotting of highator boxes....
+      if (add == FALSE)
+        plot(0,
+             type = "n",
+             xlim = x.lim,
+             ylim = y.lim,
+             axes = plot.axes,
+             xlab = "",
+             ylab = "")
+      
+      # .. plotting of high boxes & labels --------------------------------------
       
       if (high.plot)
       {
@@ -262,7 +274,7 @@ plot_bipartite <-
           if (!is.null(adj.high)) ad = adj.high
           text(
             x = high_x + high.xoff + high_prop[i] / 2,
-            y = high.y + y.width.high + hoehe + hoffset,
+            y = high.y + y.width.high + hoehe + hoffset + text.offset.high.y,
             labels = colnames(web)[i],
             cex = labsize.high,
             srt = text.rot.high,
@@ -277,7 +289,7 @@ plot_bipartite <-
         }
       } # end of highator boxes plotting
       
-      # plotting of low boxes....
+      # .. plotting of low boxes & labels ---------------------------------------
       
       if (low.plot)
       {
@@ -324,7 +336,7 @@ plot_bipartite <-
           if (!is.null(adj.low)) ad=adj.low
           text(
             x = low_x + low.xoff + low_prop[i] / 2,
-            y = low.y - y.width.low - hoffset,
+            y = low.y - y.width.low - hoffset - text.offset.low.y,
             labels = rownames(web)[i],
             cex = labsize.low,
             srt = text.rot.low,
@@ -339,6 +351,10 @@ plot_bipartite <-
           
         }
       }# end of low boxes plotting
+      
+      
+      # .. prepare & draw interaction lines  ------------------------------------
+      
       px <- c(0, 0, 0, 0)
       py <- c(0, 0, 0, 0)
       high_x <- 0
@@ -397,13 +413,14 @@ plot_bipartite <-
               (i - 1) * low_spacing + cumsum(tweb)[(i - 1) * nrow(tweb)] / websum +
               colSums(tweb)[i] / websum / 2
             if (!is.null(low.abun)) x3<- x3 +cumsum(difff)[i-1]
-          x4<-x3
-          
+            x4<-x3
+            
           }  else
           {
             x3=colSums(tweb)[i]/websum/2; x4=x3;
           }
         }
+        
         # calculate color of interaction based on web order
         icol <-
           col.interaction[((low.order[XYcoords[p, 1]] - 1) * (length(high.order)) +
@@ -420,16 +437,17 @@ plot_bipartite <-
       }
       #par(op)
     }
-    #----------------------- End of classic plotweb function by Bernd Gruber ---------
+    # End of classic plotweb function by Bernd Gruber
     
+    # *************************************************************************
+    # NEW plotweb function modified by Jochen Fruend, to be used if ab --------
+    # *************************************************************************
     
-    
-    #----------------------- NEW plotweb function modified by Jochen Fruend, to be used if abuns.type=='independent' ---------
     #! if abuns.type='independent', call this NEW function version by JochenFruend only plots one type of abun-boxes per species [and is thus suitable for independent abundances]
     #JFedit: I also cleaned up the code a bit and deleted old (out-commented) code
     if (abuns.type=='independent'){
       
-      #--- PART 1: changing the matrix ---
+      # . PART 1: changing the matrix -----------------------------------------
       
       #op <- par(no.readonly = TRUE)
       if (empty) web <- empty(web) else method <- "normal"
@@ -499,8 +517,7 @@ plot_bipartite <-
       }
       #--- END of PART 1: resorting the matrix ---
       
-      
-      #--- PART 2: preparations before plotting ---
+      # . PART 2: preparations before plotting --------------------------------
       #JFedit: I changed and restructured quite a lot here (now freq+abun removed, always using lowfreq)
       # the difference thing cannot be used any more!
       websum <- sum(web)     # check where this is used, and whether the freq-sums should be used instead
@@ -555,11 +572,12 @@ plot_bipartite <-
       # END of high_spacing / low_spacing part
       
       
-      ### beginn of plotting ###
+      # . beginning of plotting -------------------------------------------------
+      
       if (add==FALSE) plot(0, type = "n", xlim = x.lim, ylim = y.lim, axes = plot.axes, xlab = "", ylab = "")
       
       
-      #--- PART 3: plotting boxes -----
+      # . PART 3: plotting boxes ------------------------------------------------
       
       #JFedit: calculate x positions for boxes
       # I try to do it vector-based so that it can be done outside of the loop
@@ -575,7 +593,8 @@ plot_bipartite <-
       x3_vals <- x3_vals / rightmost_l
       # end JFedit
       
-      #-- plotting of highator boxes....
+      
+      # .. plotting of high boxes & labels -------------------------------------
       
       if (high.plot)
       {
@@ -612,7 +631,7 @@ plot_bipartite <-
           if (!is.null(adj.high)) ad = adj.high
           text(
             x = high_x + high.xoff + high_prop[i] / 2,
-            y = high.y + y.width.high + hoehe + hoffset,
+            y = high.y + y.width.high + hoehe + hoffset + text.offset.high.y,
             labels = colnames(web)[i],
             cex = labsize.high,
             srt = text.rot.high,
@@ -628,7 +647,7 @@ plot_bipartite <-
       } # end of highator boxes plotting
       
       
-      #-- plotting of low boxes....
+      # .. plotting of low boxes & labels --------------------------------------
       
       if (low.plot)
       {
@@ -664,7 +683,7 @@ plot_bipartite <-
           if (!is.null(adj.low)) ad = adj.low
           text(
             x = low_x + low.xoff + low_prop[i] / 2,
-            y = low.y - y.width.low - hoffset,
+            y = low.y - y.width.low - hoffset - text.offset.low.y,
             labels = rownames(web)[i],
             cex = labsize.low,
             srt = text.rot.low,
@@ -679,7 +698,8 @@ plot_bipartite <-
         }
       }# end of low boxes plotting
       
-      #--- PART 4: plotting interactions
+      # . PART 4: plotting interactions -----------------------------------------
+      
       # some preparations  
       px <- c(0, 0, 0, 0)
       py <- c(0, 0, 0, 0)
@@ -735,7 +755,7 @@ plot_bipartite <-
         polygon(c(x1+high.xoff, x2+high.xoff, x4+low.xoff, x3+low.xoff), c(y1, y2, y4, y3), col = icol, border=bicol)
       }
     }
-    #----------------------- End of NEW plotweb function modif. by Jochen Fruend ---------  
+    # End of NEW plotweb function modif. by Jochen Fruend
   } # end of overall function
 
 
